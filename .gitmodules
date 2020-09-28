@@ -1,0 +1,6 @@
+[submodule "dependence/swoole-src"]
+	path = dependence/swoole-src
+	url = https://github.com/swoole/swoole-src.git
+[submodule "dependence/pinpoint-c-agent"]
+	path = dependence/pinpoint-c-agent
+	url = https://github.com/eeliu/pinpoint-c-agent.git
