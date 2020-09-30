@@ -15,7 +15,6 @@ class Server extends SServer
         }
         parent::on($event,$callback);
 
-
     }
 
 }

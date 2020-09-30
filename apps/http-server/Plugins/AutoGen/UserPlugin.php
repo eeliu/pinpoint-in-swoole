@@ -15,40 +15,26 @@
 # the License.
 #-------------------------------------------------------------------------------
 
-/**pinpoint_start_trace
- * User: eeliu
- * Date: 1/4/19
- * Time: 3:23 PM
+namespace Plugins\AutoGen;
+use Plugins\Framework\Swoole\Candy;
+use Plugins\Framework\Swoole\IDContext;
+
+/**
+ * @hook:app\HttpServer::doSomething app\HttpServer::doSomething1 app\HttpServer::doSomething2
+ * @hook:app\HttpServer::doAny
  */
-
-namespace Plugins\Common;
-require_once "PluginsDefines.php";
-
-abstract class Candy
+class UserPlugin extends Candy
 {
-    protected $apId;
-    protected $who;
-    protected $args;
-    protected $ret=null;
-
-    public function __construct($apId,$who,&...$args)
-    {
-        /// todo start_this_aspect_trace
-        $this->apId = $apId;
-        $this->who =  $who;
-        $this->args = &$args;
-        pinpoint_start_trace();
-        pinpoint_add_clue(INTERCEPTER_NAME,$apId);
+    public function onBefore(){
+        pinpoint_add_clue("stp",PHP_METHOD,$this->id);
+        pinpoint_add_clues(PHP_ARGS,"null",$this->id);
     }
 
-    public function __destruct()
-    {
-        pinpoint_end_trace();
+    public function onEnd(&$ret){
+        pinpoint_add_clues(PHP_RETURN,"null",$this->id);
     }
 
-    abstract function onBefore();
-
-    abstract function onEnd(&$ret);
-
-    abstract function onException($e);
+    public function onException($e){
+        pinpoint_add_clue("EXP",$e->getMessage(),$this->id);
+    }
 }

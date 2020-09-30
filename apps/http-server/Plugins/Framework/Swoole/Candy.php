@@ -15,14 +15,13 @@
 # the License.
 #-------------------------------------------------------------------------------
 
-/**pinpoint_start_trace
+/**
  * User: eeliu
  * Date: 1/4/19
  * Time: 3:23 PM
  */
 
-namespace Plugins\Common;
-require_once "PluginsDefines.php";
+namespace Plugins\Framework\Swoole;
 
 abstract class Candy
 {
@@ -30,6 +29,7 @@ abstract class Candy
     protected $who;
     protected $args;
     protected $ret=null;
+    protected $id;
 
     public function __construct($apId,$who,&...$args)
     {
@@ -37,13 +37,15 @@ abstract class Candy
         $this->apId = $apId;
         $this->who =  $who;
         $this->args = &$args;
-        pinpoint_start_trace();
-        pinpoint_add_clue(INTERCEPTER_NAME,$apId);
+        $this->id = pinpoint_start_trace(IDContext::get());
+        IDContext::set($this->id);
+        pinpoint_add_clue(INTERCEPTER_NAME,$apId,$this->id);
     }
 
     public function __destruct()
     {
-        pinpoint_end_trace();
+        $id = pinpoint_end_trace($this->id);
+        IDContext::set($id);
     }
 
     abstract function onBefore();
