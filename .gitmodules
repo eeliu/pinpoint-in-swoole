@@ -4,3 +4,6 @@
 [submodule "dependence/pinpoint-c-agent"]
 	path = dependence/pinpoint-c-agent
 	url = https://github.com/eeliu/pinpoint-c-agent.git
+[submodule "apps/easyswoole-admin"]
+	path = apps/easyswoole-admin
+	url = https://github.com/xiaobaiskill/easyswoole-admin
