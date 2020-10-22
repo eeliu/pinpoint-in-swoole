@@ -22,7 +22,7 @@ define('PER_REQ_CLASS_NAME','Plugins\Framework\Swoole\Http\Server\PerReqPlugin')
 define('APPLICATION_NAME','APP-3');
 define('APPLICATION_ID','app-3');
 define("PINPOINT_USE_CACHE",'NO');
-require_once __DIR__. '/vendor/naver/pinpoint-php-aop/auto_pinpointed.php';
+require_once __DIR__. '/vendor/pinpoint-apm/pinpoint-php-aop/auto_pinpointed.php';
 #################################################
 
 if(file_exists(EASYSWOOLE_ROOT.'/bootstrap.php')){
