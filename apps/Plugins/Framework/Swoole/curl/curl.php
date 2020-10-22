@@ -1,5 +1,6 @@
 <?php
-namespace Plugins\Sys\curl;
+namespace Plugins\Framework\Swoole\curl;
+use Plugins\Sys\curl\CurlUtil;
 
 static $chArr= [];
 
@@ -79,25 +80,43 @@ function curl_setopt($ch, $option, $value)
 //        throw $e;
 //    }
 }
+
 function curl_setopt_array($ch, array $options)
 {
-    $args = \pinpoint_get_func_ref_args();
-    $commPlugins_curl_setopt_array_var = new NextSpanPlugin('curl_setopt_array', null, $args);
-    try {
-        $commPlugins_curl_setopt_array_var->onBefore();
-        $commPlugins_curl_setopt_array_ret = call_user_func_array('curl_setopt_array', $args);
-        $commPlugins_curl_setopt_array_var->onEnd($commPlugins_curl_setopt_array_ret);
-        return $commPlugins_curl_setopt_array_ret;
-    } catch (\Exception $e) {
-        $commPlugins_curl_setopt_array_var->onException($e);
-        throw $e;
-    }
+//    $args = \pinpoint_get_func_ref_args();
+//    $commPlugins_curl_setopt_array_var = new NextSpanPlugin('curl_setopt_array', null, $args);
+//    try {
+//        $commPlugins_curl_setopt_array_var->onBefore();
+//        $commPlugins_curl_setopt_array_ret = call_user_func_array('curl_setopt_array', $args);
+//        $commPlugins_curl_setopt_array_var->onEnd($commPlugins_curl_setopt_array_ret);
+//        return $commPlugins_curl_setopt_array_ret;
+//    } catch (\Exception $e) {
+//        $commPlugins_curl_setopt_array_var->onException($e);
+//        throw $e;
+//    }
+
+    $url = $options[CURLOPT_URL];
+    CurlUtil::appendPinpointHeader($url,$options[CURLOPT_HTTPHEADER]);
+
+//    var_dump($options);
+    $ret =  \curl_setopt_array($ch,$options);
+
+    return $ret;
+
 }
 function curl_exec($ch)
 {
-
-    // add curl_exec
-
+    $args = \pinpoint_get_func_ref_args();
+    $commPlugins_curl_exec_var = new NextSpanPlugin('curl_exec', null, $args);
+    try {
+        $commPlugins_curl_exec_var->onBefore();
+        $commPlugins_curl_exec_ret = call_user_func_array('curl_exec', $args);
+        $commPlugins_curl_exec_var->onEnd($commPlugins_curl_exec_ret);
+        return $commPlugins_curl_exec_ret;
+    } catch (\Exception $e) {
+        $commPlugins_curl_exec_var->onException($e);
+        throw $e;
+    }
 }
 
 function curl_close($ch)

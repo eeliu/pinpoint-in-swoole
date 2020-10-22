@@ -2,13 +2,15 @@
 
 
 namespace Plugins\Sys\curl;
-use Plugins\PerRequestPlugins;
+
+use Plugins\Framework\Swoole\IDContext;
+use Plugins\Util\Trace;
 
 class CurlUtil
 {
-    public static function appendPinpointHeader($ch, &$headers)
+    public static function appendPinpointHeader($url, &$headers)
     {
-        if(PerRequestPlugins::instance()->traceLimit()){
+        if(pinpoint_get_context('Pinpoint-Sampled', IDContext::get())=="s0"){
             $headers[] = 'Pinpoint-Sampled:s0';
             return ;
         }
@@ -16,15 +18,39 @@ class CurlUtil
         $headers[] ='Pinpoint-Sampled:s1';
         $headers[] ='Pinpoint-Flags:0';
         $headers[] ='Pinpoint-Papptype:1500';
-        $headers[] ='Pinpoint-Pappname:'.PerRequestPlugins::instance()->app_name;
+        $headers[] ='Pinpoint-Pappname:'.APPLICATION_NAME;
 
-        $headers[] = 'Pinpoint-Host:'.static::getHostFromURL(curl_getinfo($ch,CURLINFO_EFFECTIVE_URL));
+        $headers[] = 'Pinpoint-Host:'.static::getHostFromURL($url);
 
-        $headers[] ='Pinpoint-Traceid:'.PerRequestPlugins::instance()->tid;
-        $headers[] ='Pinpoint-Pspanid:'.PerRequestPlugins::instance()->sid;
-        $nsid = PerRequestPlugins::instance()->generateSpanID();
+        $headers[] ='Pinpoint-Traceid:'.pinpoint_get_context('tid', IDContext::get());
+        $headers[] ='Pinpoint-Pspanid:'.pinpoint_get_context('sid', IDContext::get());
+        $nsid = Trace::generateSpanID();
         $headers[] ='Pinpoint-Spanid:'.$nsid;
+        pinpoint_set_context('nsid', (string)$nsid, IDContext::get());
     }
+
+    public static function appendPinpointHeaderInKeyValue($url, &$headers)
+    {
+        if(pinpoint_get_context('Pinpoint-Sampled', IDContext::get())=="s0"){
+            $headers['Pinpoint-Sampled'] ='s0';
+            return ;
+        }
+
+        $headers['Pinpoint-Sampled'] ='s1';
+        $headers['Pinpoint-Flags'] ='0';
+        $headers['Pinpoint-Papptype'] ='1500';
+        $headers['Pinpoint-Pappname'] = APPLICATION_NAME;
+
+        $headers['Pinpoint-Host'] = static::getHostFromURL($url);
+
+        $headers['Pinpoint-Traceid'] = pinpoint_get_context('tid', IDContext::get());
+        $headers['Pinpoint-Pspanid'] = pinpoint_get_context('sid', IDContext::get());
+        $nsid = Trace::generateSpanID();
+        $headers['Pinpoint-Spanid'] = $nsid;
+        pinpoint_set_context('nsid', (string)$nsid, IDContext::get());
+    }
+
+
 
     public static function addPinpointHeader($ch,$url)
     {
