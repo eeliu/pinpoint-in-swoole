@@ -8,8 +8,8 @@ define('PLUGINS_DIR', __DIR__ . '/Plugins/');
 define('PER_REQ_CLASS_NAME','Plugins\Framework\Swoole\Http\Server\PerReqPlugin');
 define('APPLICATION_NAME','APP-2');
 define('APPLICATION_ID','app-2');
-define("PINPOINT_ENV",'dev');
-require_once __DIR__. '/vendor/naver/pinpoint-php-aop/auto_pinpointed.php';
+define("PINPOINT_USE_CACHE",'YES');
+require_once __DIR__. '/vendor/pinpoint-apm/pinpoint-php-aop/auto_pinpointed.php';
 
 #################################################
 
