@@ -26,7 +26,7 @@
 1. easyswoole-admin installed 
 2. copy `Plugins` into root
 3. Replace composer.json with`Plugins/Framework/EasySwoole/composer.json` and `composer update` 
-4. cp `Plugins/Framework/EasySwoole/setting.ini` into root
+4. cp `Plugins/Framework/EasySwoole/setting.ini` into `Plugins/`
 5. Enable pinpoint header into easyswoole framework
    
     Example: Plugins/Framework/EasySwoole/easyswoole_example.txt 
