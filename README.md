@@ -21,7 +21,7 @@
 3. cp `Plugins/Framework/SwooleApp/setting.ini` into root
 4. php run_server.php
 
-### 2.2 apps/easyswoole-admin
+#### 2.2 apps/easyswoole-admin
 
 1. easyswoole-admin installed 
 2. copy `Plugins` into root
